@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+    <from class="login">
+       <span>用户名或密码错误!</span>
+       <label for="">
+            用户名: <input type="text" class="username" placeholder="请输入用户名">
+       </label>
+       <label for="">
+             密码: <input type="text" class="password" placeholder="请输入密码">
+       </label>
+        <div class="inner">
+            <p class="submit">登录</p><p class="regist">注册</p>
+        </div>     
+    </from>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/jqsck.js"></script>
+    <script>
+        $('.login').on('click','p',function(e){
+            e.preventDefault()
+            const username = $('.username').val()
+            const password = $('.password').val()
+            if(! username || ! password){
+                alert('你的输入有误')
+                return
+            }
+
+            if(e.target.className === 'submit'){    
+                $.ajax({
+                    url:'./server/sign.php',
+                    method:'POST',
+                    data:`username=${username}&password=${password}`,
+                    dataType: 'json',
+                    success(res){
+                        if(res.code === 1 ){
+                            // console.log(res)
+                           $.setCookie( 'bay' , res.username)
+                            window.location.href = './index.html'
+                        }
+                    }
+                })
+            }
+            if(e.target.className === 'regist'){
+                $.ajax({
+                    url:'./server/sign.php',
+                    method:'POST',
+                    data:`username=${username}&password=${password}`,
+                    dataType: 'json',
+                    success (res) {
+                        console.log(res)
+                    }
+                }
+            )}
+        })
+        console.log($.getCookie('bay'))
+        
+    </script>
+</body>
+</html>
